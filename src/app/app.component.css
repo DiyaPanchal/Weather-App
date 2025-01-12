@@ -2,9 +2,8 @@
   background-color: #f3c583;
   color: #333;
   padding: 20px;
-  border-radius: 10px;
+  min-height: 100vh;
 }
-
 .header {
   font-size: 20px;
 }
