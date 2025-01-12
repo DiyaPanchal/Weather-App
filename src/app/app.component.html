@@ -1,40 +1,48 @@
 <div class="container-fluid weather-app">
-  <!-- Weather Header -->
-  <div class="header d-flex justify-content-between align-items-center">
-    <div class="location"><i class="bi bi-geo-alt-fill"></i> Select Date ></div>
+  <!-- Video background -->
+  <div class="video-background">
+    <video  autoplay loop muted playsinline preload="auto">
+      <source src="../assets/cloudy.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="calender">
+      <i class="bi bi-calendar"></i> Select Date
+    </div>
+  </div>
+
+  <!-- Current Weather Section -->
+  <div class="upper-section">
+    <div class="current-weather">
+      <h1 class="temperature">26°C</h1>
+      <p class="condition">Cloudy</p>
+      <p class="date">Sunday | 12 Dec 2023</p>
+    </div>
     <div class="weather-icon">
-      <i class="bi bi-cloud"></i>
+      <img src="assets/cloud.svg" alt="Cloud Icon">
     </div>
   </div>
 
-  <!-- Current Weather -->
-  <div class="current-weather text-center">
-    <h1 class="temperature">26°C</h1>
-    <p class="condition">Cloudy</p>
-    <p class="date">Sunday | 12 Dec 2023</p>
-  </div>
-
-  <!-- Activities Section -->
-  <div class="activities-section mt-4">
-    <h5>Activities in your area</h5>
-    <div class="activities d-flex justify-content-between">
-      <div class="activity-card">
-        <img src="../assets/park.png" alt="Park" />
-        <p>2km away</p>
-      </div>
-      <div class="activity-card">
-        <img src="../assets/forest.png" alt="Forest" />
-        <p>1.5km away</p>
-      </div>
-      <div class="activity-card">
-        <img src="../assets/pool.png" alt="Pool" />
-        <p>3km away</p>
-      </div>
-      <div class="activity-card">
-        <img src="../assets/beach.png" alt="Beach" />
-        <p>500m away</p>
-      </div>
-    </div>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#" class="nav-link text-white text-center">
+      <i class="bi bi-cloud-sun"></i>
+      <p>Weather</p>
+    </a>
+    <a href="#" class="nav-link text-white text-center">
+      <i class="bi bi-geo-alt-fill"></i>
+      <p>Explore</p>
+    </a>
+    <a href="#" class="nav-link text-white text-center">
+      <i class="bi bi-building"></i>
+      <p>Cities</p>
+    </a>
+    <a href="#" class="nav-link text-white text-center">
+      <i class="bi bi-gear"></i>
+      <p>Settings</p>
+    </a>
   </div>
 
   <!-- 24-hour Forecast -->
