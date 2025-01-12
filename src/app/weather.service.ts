@@ -5,14 +5,14 @@ import axios from 'axios';
   providedIn: 'root',
 })
 export class WeatherService {
-  private apiUrl =
-    'https://api.data.gov.sg/v1/environment/4-day-weather-forecast?date=2025-01-12';
+  private baseUrl =
+    'https://api.data.gov.sg/v1/environment/4-day-weather-forecast';
 
   constructor() {}
 
-  getWeatherData() {
+  getWeatherData(date: string) {
     return axios
-      .get(this.apiUrl)
+      .get(`${this.baseUrl}?date=${date}`)
       .then((response) => {
         // Handle successful response
         return response.data;

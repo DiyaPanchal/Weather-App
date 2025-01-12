@@ -222,3 +222,7 @@
     flex-wrap: wrap;
   }
 }
+.mat-form-field {
+  width: 100%;
+  margin-top: 10px;
+}

@@ -1,27 +1,38 @@
 <div class="container-fluid weather-app">
   <!-- Video background -->
   <div class="video-background">
-    <video  autoplay loop muted playsinline preload="auto">
-      <source src="../assets/cloudy.mp4" type="video/mp4">
+    <video autoplay loop muted playsinline preload="auto">
+      <source src="../assets/cloudy.mp4" type="video/mp4" />
     </video>
   </div>
 
   <!-- Header -->
   <div class="header">
     <div class="calender">
-      <i class="bi bi-calendar"></i> Select Date
+      <i class="bi bi-calendar" (click)="openDatePicker()"></i> Select Date
     </div>
   </div>
 
   <!-- Current Weather Section -->
   <div class="upper-section">
-    <div class="current-weather">
+    <!-- <div class="current-weather">
       <h1 class="temperature">26°C</h1>
       <p class="condition">Cloudy</p>
       <p class="date">Sunday | 12 Dec 2023</p>
+    </div> -->
+    <div class="current-weather">
+      <h1 class="temperature">
+        {{ weatherData?.items[0]?.forecasts[0]?.temperature.high }}°C
+      </h1>
+      <p class="condition">
+        {{ weatherData?.items[0]?.forecasts[0]?.forecast }}
+      </p>
+      <p className="date">
+        {{ formattedDate }}
+      </p>
     </div>
     <div class="weather-icon">
-      <img src="assets/cloud.svg" alt="Cloud Icon">
+      <img src="assets/cloud.svg" alt="Cloud Icon" />
     </div>
   </div>
 
@@ -43,6 +54,19 @@
       <i class="bi bi-gear"></i>
       <p>Settings</p>
     </a>
+
+    <mat-form-field>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        placeholder="Select Date"
+        (dateChange)="onDateChange($event)"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Current Weather -->
   </div>
 
   <!-- 24-hour Forecast -->
