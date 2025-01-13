@@ -167,10 +167,20 @@ export class AppComponent implements OnInit {
             text: null,
           },
           xAxis: {
-            visible: true,
+            visible: true, // Keep hidden initially
+            labels: {
+              style: {
+                color: 'white', // Set X-axis label color to white
+              },
+            },
           },
           yAxis: {
-            visible: true,
+            visible: true, // Keep hidden initially
+            labels: {
+              style: {
+                color: 'white', // Set X-axis label color to white
+              },
+            },
           },
         };
       })
