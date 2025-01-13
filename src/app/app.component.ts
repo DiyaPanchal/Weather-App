@@ -1,22 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { WeatherService } from './weather.service';
+import { isPlatformBrowser } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { HighchartsChartModule } from 'highcharts-angular'; // Import Highcharts module
 import * as Highcharts from 'highcharts'; // Import Highcharts library
+import { AgGridAngular } from 'ag-grid-angular';
+import { ColDef } from 'ag-grid-community';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  standalone: true,
   imports: [
     MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule,
     FormsModule,
     HighchartsChartModule,
+    AgGridAngular,
   ],
 })
 export class AppComponent implements OnInit {
@@ -25,65 +30,71 @@ export class AppComponent implements OnInit {
   formattedDate: any;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: any;
+  rowData = [
+    { make: 'Tesla', model: 'Model Y', price: 64950, electric: true },
+    { make: 'Ford', model: 'F-Series', price: 33850, electric: false },
+    { make: 'Toyota', model: 'Corolla', price: 29600, electric: false },
+  ];
 
-  constructor(private weatherService: WeatherService) {}
+  colDefs: ColDef[] = [
+    { field: 'make' },
+    { field: 'model' },
+    { field: 'price' },
+    { field: 'electric' },
+  ];
+
+  constructor(
+    private weatherService: WeatherService,
+    @Inject(PLATFORM_ID) private platformId: object
+  ) {}
 
   ngOnInit(): void {
     const today = new Date();
-    this.selectedDate = today; // Use Date object directly
-    this.fetchWeatherData(today); // Fetch weather data with Date object
+    this.selectedDate = today;
+    this.fetchWeatherData(today);
     this.prepareChartData();
+    this.initializeChart();
   }
 
-  // Open date picker function
   openDatePicker(): void {
-    const dateInput = document.querySelector('input[matInput]') as HTMLElement;
-    dateInput?.focus(); // Focus on the input to open the date picker
+    if (isPlatformBrowser(this.platformId)) {
+      const dateInput = document.querySelector(
+        'input[matInput]'
+      ) as HTMLElement;
+      dateInput?.focus();
+    }
   }
 
-  // Date change handler
   onDateChange(event: any): void {
-    const selectedDate = new Date(event.value); // event.value should already be a Date object
+    const selectedDate = new Date(event.value);
     const formattedDate = new Date(
       Date.UTC(
         selectedDate.getFullYear(),
         selectedDate.getMonth(),
         selectedDate.getDate()
       )
-    ); // Set time to UTC midnight
-
-    this.selectedDate = formattedDate; // Update selectedDate with the adjusted date
-
-    console.log('selectedDate===', formattedDate);
-    this.fetchWeatherData(formattedDate); // Pass the UTC date object to fetch weather data
+    );
+    this.selectedDate = formattedDate;
+    this.fetchWeatherData(formattedDate);
   }
 
   formatDate(dateString: any): string {
     if (!dateString) return '';
     const date = new Date(dateString);
-
-    // Get the full weekday, day, month, and year values
     const weekday = date.toLocaleString('en-US', { weekday: 'long' });
     const day = date.getDate();
     const month = date.toLocaleString('en-US', { month: 'short' });
     const year = date.getFullYear();
-
-    // Return the formatted date string with custom separator "|"
     return `${weekday} | ${day < 10 ? '0' + day : day} ${month} ${year}`;
   }
 
-  // Fetch weather data
   private fetchWeatherData(date: Date): void {
-    const formattedDate = date.toISOString().split('T')[0]; // Format the date as YYYY-MM-DD
-    const today = new Date();
-
+    const formattedDate = date.toISOString().split('T')[0];
     this.weatherService
-      .getWeatherData(formattedDate) // Pass formatted date string (YYYY-MM-DD)
+      .getWeatherData(formattedDate)
       .then((data) => {
         this.weatherData = data;
-        this.prepareChartData(data);
         this.formattedDate = this.formatDate(formattedDate);
-        console.log('Weather Data:', this.weatherData);
       })
       .catch((error) => {
         console.error('Error fetching weather data:', error);
@@ -91,46 +102,64 @@ export class AppComponent implements OnInit {
   }
 
   refreshPage(): void {
-    window.location.reload();
+    if (isPlatformBrowser(this.platformId)) {
+      window.location.reload();
+    }
   }
 
-  prepareChartData(data?: any): void {
-    console.log(data, 'chart data');
+  prepareChartData(): void {
+    this.weatherService
+      .fetch30DaysHumidity()
+      .then((data) => {
+        const humidityData = data.map((item: any) => {
+          if (item.humidity && typeof item.humidity.low === 'number') {
+            return item.humidity.low;
+          } else {
+            console.warn('Invalid item structure:', item);
+            return 0;
+          }
+        });
+
+        this.chartOptions = {
+          chart: { backgroundColor: null },
+          legend: { enabled: false },
+          series: [
+            {
+              name: 'Humidity',
+              data: humidityData,
+              type: 'line',
+              color: 'white',
+              dataLabels: {
+                enabled: true,
+                color: 'white',
+                style: {
+                  fontSize: '10px',
+                  textOutline: 'none',
+                },
+                verticalAlign: 'bottom',
+              },
+            },
+          ],
+          title: { text: null },
+        };
+      })
+      .catch((error) => {
+        console.error('Error fetching weather data:', error);
+      });
+  }
+
+  initializeChart(): void {
     this.chartOptions = {
-      chart: {
-        backgroundColor: null, // Transparent background
-      },
-      legend: {
-        enabled: false, // Disable the legend
-      },
+      chart: { backgroundColor: null },
       series: [
         {
-          data: [1, 2, 3, 3, 1, 2],
+          name: 'Humidity',
+          data: [60, 55, 70],
           type: 'line',
-          color: 'white', // Plot line in white
-          dataLabels: {
-            enabled: true, // Show numbers above points
-            color: 'white', // Numbers in white font
-            style: {
-              fontSize: '10px', // Adjust font size if needed
-              textOutline: 'none',
-            },
-            verticalAlign: 'bottom', // Position above the points
-          },
+          color: 'white',
         },
       ],
-      title: {
-        text: null, // Remove the title
-      },
-      xAxis: {
-        visible: false, // Remove the x-axis
-      },
-      yAxis: {
-        visible: false, // Remove the y-axis
-      },
-      grid: {
-        enabled: false, // Ensure no grid is shown
-      },
+      title: { text: '30-Day Humidity Levels' },
     };
   }
 }
