@@ -6,18 +6,13 @@
     </video>
   </div>
 
-  <highcharts-chart
-    [Highcharts]="Highcharts"
-    [options]="chartOptions"
-    style="width: 100%; height: 400px; display: block"
-  ></highcharts-chart>
   <!-- Header -->
   <div class="header">
     <div class="calendar" (click)="picker.open()">
       <i class="bi bi-calendar"></i>
       <!-- Trigger the open method -->
       Select Date
-      <mat-form-field style="display: none">
+      <mat-form-field>
         <input
           matInput
           [matDatepicker]="picker"
@@ -58,12 +53,13 @@
     <div class="sidebar col">
       <a href="#" class="nav-link text-white text-center">
         <i class="bi bi-cloud-sun"></i>
-        <p>Weather</p>
+        <p>Humidity</p>
       </a>
       <a href="#" class="nav-link text-white text-center">
-        <i class="bi bi-geo-alt-fill"></i>
-        <p>Explore</p>
+        <i class="bi bi-table"></i>
+        <p>Table</p>
       </a>
+
       <a
         href="javascript:void(0)"
         class="nav-link text-white text-center"
@@ -82,7 +78,12 @@
     <!-- Humidity Chart -->
     <div class="humidity-chart forecast mt-4 col-9">
       <h5>Humidity Trend</h5>
-      <div id="humidityChart"></div>
+      <div class="chart">
+        <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]="chartOptions"
+        ></highcharts-chart>
+      </div>
     </div>
     <!-- Weather Details -->
     <div class="weather-details mt-4 col-2">

@@ -97,22 +97,39 @@ export class AppComponent implements OnInit {
   prepareChartData(data?: any): void {
     console.log(data, 'chart data');
     this.chartOptions = {
+      chart: {
+        backgroundColor: null, // Transparent background
+      },
+      legend: {
+        enabled: false, // Disable the legend
+      },
       series: [
         {
           data: [1, 2, 3, 3, 1, 2],
           type: 'line',
+          color: 'white', // Plot line in white
+          dataLabels: {
+            enabled: true, // Show numbers above points
+            color: 'white', // Numbers in white font
+            style: {
+              fontSize: '10px', // Adjust font size if needed
+              textOutline: 'none',
+            },
+            verticalAlign: 'bottom', // Position above the points
+          },
         },
       ],
       title: {
-        text: 'Weather Forecast',
+        text: null, // Remove the title
       },
       xAxis: {
-        categories: ['1', '2', '3', '4', '5', '6'], // Use actual timestamps from data
+        visible: false, // Remove the x-axis
       },
       yAxis: {
-        title: {
-          text: 'Temperature (°C)',
-        },
+        visible: false, // Remove the y-axis
+      },
+      grid: {
+        enabled: false, // Ensure no grid is shown
       },
     };
   }
