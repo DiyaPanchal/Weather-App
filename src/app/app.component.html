@@ -17,6 +17,7 @@
         <input
           matInput
           [matDatepicker]="picker"
+          [max]="maxDate"
           (dateChange)="onDateChange($event)"
         />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

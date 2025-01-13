@@ -14,11 +14,9 @@ export class WeatherService {
     return axios
       .get(`${this.baseUrl}?date=${date}`)
       .then((response) => {
-        // Handle successful response
         return response.data;
       })
       .catch((error) => {
-        // Handle error
         console.error('There was an error!', error);
         throw error;
       });
@@ -37,7 +35,7 @@ export class WeatherService {
 
       try {
         const response = await axios.get(`${baseURL}?date=${formattedDate}`);
-        const forecast = response.data.items?.[0]?.forecasts?.[0]; // Get only the first forecast
+        const forecast = response.data.items?.[0]?.forecasts?.[0]; 
 
         if (forecast) {
           results.push({
