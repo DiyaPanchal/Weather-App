@@ -24,10 +24,9 @@ export class WeatherService {
       });
   }
 
-  async fetch30DaysHumidity() {
+  async fetch30DaysHumidity(startDate: Date) {
     const baseURL =
       'https://api.data.gov.sg/v1/environment/4-day-weather-forecast';
-    const startDate = new Date('2024-12-01'); // Adjust the start date as needed
     const daysToFetch = 30;
     const results = [];
 

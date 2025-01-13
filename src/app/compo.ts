@@ -6,7 +6,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { HighchartsChartModule } from 'highcharts-angular'; // Import Highcharts module
 import * as Highcharts from 'highcharts'; // Import Highcharts library
-import { Inject, PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -26,19 +25,24 @@ export class AppComponent implements OnInit {
   formattedDate: any;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: any;
+  maxDate: Date = new Date(); // Initialize maxDate with current date
 
-  constructor(
-    private weatherService: WeatherService,
-    @Inject(PLATFORM_ID) private platformId: object
-  ) {}
+  constructor(private weatherService: WeatherService) {}
 
   ngOnInit(): void {
     const today = new Date();
     this.selectedDate = today; // Use Date object directly
     this.fetchWeatherData(today); // Fetch weather data with Date object
     this.prepareChartData();
+    this.setMaxDate(); // Set max date when component initializes
+  }
 
-    this.initializeChart();
+  // Set the max date based on IST (Indian Standard Time)
+  setMaxDate(): void {
+    const today = new Date();
+    // Convert to IST (Indian Standard Time)
+    const istTime = new Date(today.getTime() + (5 * 60 + 30) * 60 * 1000);
+    this.maxDate = new Date(istTime.getFullYear(), istTime.getMonth(), istTime.getDate());
   }
 
   // Open date picker function
@@ -46,18 +50,6 @@ export class AppComponent implements OnInit {
     const dateInput = document.querySelector('input[matInput]') as HTMLElement;
     dateInput?.focus(); // Focus on the input to open the date picker
   }
-
-  // private fetchWeatherData30(): void {
-  //   this.weatherService
-  //     .fetch30DaysHumidity() // Fetch the 30-day humidity data
-  //     .then((data) => {
-  //       this.weatherData = data;
-  //       console.log('Weather Data:', this.weatherData);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching weather data:', error);
-  //     });
-  // }
 
   // Date change handler
   onDateChange(event: any): void {
@@ -74,8 +66,6 @@ export class AppComponent implements OnInit {
 
     console.log('selectedDate===', formattedDate);
     this.fetchWeatherData(formattedDate); // Pass the UTC date object to fetch weather data
-    this.prepareChartData();
-
   }
 
   formatDate(dateString: any): string {
@@ -101,6 +91,7 @@ export class AppComponent implements OnInit {
       .getWeatherData(formattedDate) // Pass formatted date string (YYYY-MM-DD)
       .then((data) => {
         this.weatherData = data;
+        this.prepareChartData(data);
         this.formattedDate = this.formatDate(formattedDate);
         console.log('Weather Data:', this.weatherData);
       })
@@ -112,100 +103,43 @@ export class AppComponent implements OnInit {
   refreshPage(): void {
     window.location.reload();
   }
-  
-  prepareChartData(): void {
-    if (!this.selectedDate) {
-      console.warn('No start date selected for fetching data.');
-      return;
-    }
 
-    this.weatherService
-      .fetch30DaysHumidity(this.selectedDate)
-      .then((data) => {
-        console.log('Fetched Data:', data); // Debug API response
-
-        const humidityData = data.map((item: any) => {
-          if (item.humidity && typeof item.humidity.low === 'number') {
-            return item.humidity.low;
-          } else {
-            console.warn('Invalid item structure:', item);
-            return 0; // Default value
-          }
-        });
-
-        console.log('Processed Humidity Data:', humidityData); // Debug processed data
-
-        // Update chart options reactively
-        this.chartOptions = {
-          chart: {
-            backgroundColor: null,
-          },
-          legend: {
-            enabled: false,
-          },
-          grid: {
-            enabled: false, // Ensure no grid is shown
-          },
-          series: [
-            {
-              name: 'Humidity',
-              data: humidityData,
-              type: 'line',
-              color: 'white',
-              dataLabels: {
-                enabled: true,
-                color: 'white',
-                style: {
-                  fontSize: '10px',
-                  textOutline: 'none',
-                },
-                verticalAlign: 'bottom',
-              },
-            },
-          ],
-          title: {
-            text: null,
-          },
-          xAxis: {
-            visible: true,
-          },
-          yAxis: {
-            visible: true, // Ensure y-axis is visible
-          },
-        };
-      })
-      .catch((error) => {
-        console.error('Error fetching weather data:', error);
-      });
-  }
-
-  initializeChart(): void {
+  prepareChartData(data?: any): void {
+    console.log(data, 'chart data');
     this.chartOptions = {
       chart: {
-        backgroundColor: null,
+        backgroundColor: null, // Transparent background
       },
       legend: {
         enabled: false, // Disable the legend
       },
       series: [
         {
-          // name: 'Humidity',
-          // data: [60, 55, 70], // Sample data
-          // type: 'line',
-          // color: 'white',
+          data: [1, 2, 3, 3, 1, 2],
+          type: 'line',
+          color: 'white', // Plot line in white
+          dataLabels: {
+            enabled: true, // Show numbers above points
+            color: 'white', // Numbers in white font
+            style: {
+              fontSize: '10px', // Adjust font size if needed
+              textOutline: 'none',
+            },
+            verticalAlign: 'bottom', // Position above the points
+          },
         },
       ],
       title: {
-        text: null,
-      },
-      grid: {
-        enabled: false, // Ensure no grid is shown
+        text: null, // Remove the title
       },
       xAxis: {
         visible: false, // Remove the x-axis
       },
       yAxis: {
         visible: false, // Remove the y-axis
+      },
+      grid: {
+        enabled: false, // Ensure no grid is shown
       },
     };
   }
