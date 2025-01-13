@@ -4,6 +4,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
+import { HighchartsChartModule } from 'highcharts-angular'; // Import Highcharts module
+import * as Highcharts from 'highcharts'; // Import Highcharts library
 
 @Component({
   selector: 'app-root',
@@ -14,12 +16,15 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     MatNativeDateModule,
     FormsModule,
+    HighchartsChartModule,
   ],
 })
 export class AppComponent implements OnInit {
   weatherData: any;
   selectedDate: Date | null = null;
   formattedDate: any;
+  Highcharts: typeof Highcharts = Highcharts;
+  chartOptions: any;
 
   constructor(private weatherService: WeatherService) {}
 
@@ -27,6 +32,7 @@ export class AppComponent implements OnInit {
     const today = new Date();
     this.selectedDate = today; // Use Date object directly
     this.fetchWeatherData(today); // Fetch weather data with Date object
+    this.prepareChartData();
   }
 
   // Open date picker function
@@ -75,20 +81,39 @@ export class AppComponent implements OnInit {
       .getWeatherData(formattedDate) // Pass formatted date string (YYYY-MM-DD)
       .then((data) => {
         this.weatherData = data;
-        const dateFromApi = data?.items[0]?.forecasts[0]?.date;
-
-        // Explicitly parse the date string as UTC and convert it to local time
-        const apiDate = today;
-
-        // Now pass the corrected date object to the formatDate method
-        this.formattedDate = this.formatDate(formattedDate); // Pass the Date object
+        this.prepareChartData(data);
+        this.formattedDate = this.formatDate(formattedDate);
         console.log('Weather Data:', this.weatherData);
       })
       .catch((error) => {
         console.error('Error fetching weather data:', error);
       });
   }
+
   refreshPage(): void {
     window.location.reload();
+  }
+
+  prepareChartData(data?: any): void {
+    console.log(data, 'chart data');
+    this.chartOptions = {
+      series: [
+        {
+          data: [1, 2, 3, 3, 1, 2],
+          type: 'line',
+        },
+      ],
+      title: {
+        text: 'Weather Forecast',
+      },
+      xAxis: {
+        categories: ['1', '2', '3', '4', '5', '6'], // Use actual timestamps from data
+      },
+      yAxis: {
+        title: {
+          text: 'Temperature (°C)',
+        },
+      },
+    };
   }
 }

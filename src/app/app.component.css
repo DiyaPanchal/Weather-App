@@ -4,7 +4,7 @@
   color: #fff;
   padding: 40px;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .video-background {
@@ -30,6 +30,7 @@
   font-size: 20px;
   color: #fff;
   margin-left: 5%;
+  cursor: pointer;
 }
 
 .header .calender {
@@ -84,7 +85,7 @@
   height: auto;
 }
 /* Lower-section */
-.lower-section{
+.lower-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -134,7 +135,6 @@
   color: #fff;
 }
 
-
 /* Humidity Chart */
 .forecast {
   background: rgba(255, 255, 255, 0.1); /* Semi-transparent section */
@@ -155,7 +155,7 @@
   border-radius: 40px;
   padding: 20px;
   text-align: center;
-  width:1200px;
+  width: 1200px;
 }
 
 .humidity-chart h5 {
@@ -163,7 +163,6 @@
   font-weight: bold;
   margin-bottom: 20px;
 }
-
 
 /* Weather Details */
 .weather-details {
@@ -224,4 +223,9 @@
 .mat-form-field {
   width: 100%;
   margin-top: 10px;
+}
+.highcharts-chart {
+  width: 100%;
+  height: 400px;
+  display: block;
 }

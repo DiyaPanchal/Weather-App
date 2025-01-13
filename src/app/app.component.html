@@ -6,11 +6,18 @@
     </video>
   </div>
 
+  <highcharts-chart
+    [Highcharts]="Highcharts"
+    [options]="chartOptions"
+    style="width: 100%; height: 400px; display: block"
+  ></highcharts-chart>
   <!-- Header -->
   <div class="header">
-    <div class="calender">
-      <i class="bi bi-calendar" (click)="openDatePicker()"></i> Select Date
-      <mat-form-field>
+    <div class="calendar" (click)="picker.open()">
+      <i class="bi bi-calendar"></i>
+      <!-- Trigger the open method -->
+      Select Date
+      <mat-form-field style="display: none">
         <input
           matInput
           [matDatepicker]="picker"
@@ -18,10 +25,11 @@
           (dateChange)="onDateChange($event)"
         />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+        <mat-datepicker #picker touchUi="true"></mat-datepicker>
       </mat-form-field>
     </div>
   </div>
+
   <!-- Current Weather Section -->
   <div class="upper-section">
     <!-- <div class="current-weather">
