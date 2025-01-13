@@ -10,9 +10,18 @@
   <div class="header">
     <div class="calender">
       <i class="bi bi-calendar" (click)="openDatePicker()"></i> Select Date
+      <mat-form-field>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Select Date"
+          (dateChange)="onDateChange($event)"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
     </div>
   </div>
-
   <!-- Current Weather Section -->
   <div class="upper-section">
     <!-- <div class="current-weather">
@@ -37,59 +46,45 @@
   </div>
 
   <!-- Sidebar -->
-  <div class="sidebar">
-    <a href="#" class="nav-link text-white text-center">
-      <i class="bi bi-cloud-sun"></i>
-      <p>Weather</p>
-    </a>
-    <a href="#" class="nav-link text-white text-center">
-      <i class="bi bi-geo-alt-fill"></i>
-      <p>Explore</p>
-    </a>
-    <a href="#" class="nav-link text-white text-center">
-      <i class="bi bi-building"></i>
-      <p>Cities</p>
-    </a>
-    <a href="#" class="nav-link text-white text-center">
-      <i class="bi bi-gear"></i>
-      <p>Settings</p>
-    </a>
+  <div class="lower-section">
+    <div class="sidebar col">
+      <a href="#" class="nav-link text-white text-center">
+        <i class="bi bi-cloud-sun"></i>
+        <p>Weather</p>
+      </a>
+      <a href="#" class="nav-link text-white text-center">
+        <i class="bi bi-geo-alt-fill"></i>
+        <p>Explore</p>
+      </a>
+      <a
+        href="javascript:void(0)"
+        class="nav-link text-white text-center"
+        (click)="refreshPage()"
+      >
+        <i class="bi bi-arrow-clockwise"></i>
+        <p>Refresh</p>
+      </a>
 
-    <mat-form-field>
-      <input
-        matInput
-        [matDatepicker]="picker"
-        placeholder="Select Date"
-        (dateChange)="onDateChange($event)"
-      />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+      <a href="#" class="nav-link text-white text-center">
+        <i class="bi bi-gear"></i>
+        <p>Settings</p>
+      </a>
+    </div>
 
-    <!-- Current Weather -->
-  </div>
-
-  <!-- 24-hour Forecast -->
-  <div class="forecast mt-4">
-    <h5>24-hour Forecast</h5>
-    <div class="forecast-chart">
-      <ul class="list-inline">
-        <li class="list-inline-item">22:00 - 26°C</li>
-        <li class="list-inline-item">02:00 - 22°C</li>
-        <li class="list-inline-item">06:00 - 20°C</li>
-        <li class="list-inline-item">10:00 - 22°C</li>
+    <!-- Humidity Chart -->
+    <div class="humidity-chart forecast mt-4 col-9">
+      <h5>Humidity Trend</h5>
+      <div id="humidityChart"></div>
+    </div>
+    <!-- Weather Details -->
+    <div class="weather-details mt-4 col-2">
+      <h5>Air Conditions</h5>
+      <ul>
+        <li><strong>Real Feel:</strong> 30°C</li>
+        <li><strong>Wind:</strong> 0.8 km/hr</li>
+        <li><strong>Chance of Rain:</strong> 2%</li>
+        <li><strong>UV Index:</strong> 4</li>
       </ul>
     </div>
-  </div>
-
-  <!-- Weather Details -->
-  <div class="weather-details mt-4">
-    <h5>Air Conditions</h5>
-    <ul>
-      <li><strong>Real Feel:</strong> 30°C</li>
-      <li><strong>Wind:</strong> 0.8 km/hr</li>
-      <li><strong>Chance of Rain:</strong> 2%</li>
-      <li><strong>UV Index:</strong> 4</li>
-    </ul>
   </div>
 </div>

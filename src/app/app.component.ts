@@ -88,4 +88,7 @@ export class AppComponent implements OnInit {
         console.error('Error fetching weather data:', error);
       });
   }
+  refreshPage(): void {
+    window.location.reload();
+  }
 }
